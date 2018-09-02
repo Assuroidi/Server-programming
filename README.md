@@ -1,2 +1,3 @@
 # Server-programming
- Course work for a server programming course
+ Course work for https://github.com/vsillan/game-server-programming-course
+ 
