@@ -1,0 +1,14 @@
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\bin\Debug\netcoreapp2.1\Test1.deps.json
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\bin\Debug\netcoreapp2.1\Test1.runtimeconfig.json
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\bin\Debug\netcoreapp2.1\Test1.runtimeconfig.dev.json
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\bin\Debug\netcoreapp2.1\Test1.dll
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\bin\Debug\netcoreapp2.1\Test1.pdb
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.csprojAssemblyReference.cache
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.csproj.CoreCompileInputs.cache
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.RazorAssemblyInfo.cache
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.RazorAssemblyInfo.cs
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.AssemblyInfoInputs.cache
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.AssemblyInfo.cs
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.RazorTargetAssemblyInfo.cache
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.dll
+c:\Koulu\Projektit\BackendKurssi\Server-programming\Assignment2\Test1\obj\Debug\netcoreapp2.1\Test1.pdb
