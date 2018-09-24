@@ -29,9 +29,10 @@ namespace Test1
             // services.AddTransient<Models.PlayerPrdoocessor>();
             // services.AddTransient<Models.InMemoryRepository>();
             services.AddSingleton<Models.PlayerProcessor>();
-            services.AddSingleton<Models.IRepository<Models.Player, Models.ModifiedPlayer> , Models.InMemoryRepository>();
+            // services.AddSingleton<Models.IRepository<Models.Player, Models.ModifiedPlayer> , Models.InMemoryRepository>();
             services.AddSingleton<Models.ItemsProcessor>();
-            services.AddSingleton<Models.IRepository<Models.Item, Models.ModifiedItem>, Models.ItemRepository>();
+            // services.AddSingleton<Models.IRepository<Models.Item, Models.ModifiedItem>, Models.ItemRepository>();
+            services.AddSingleton<Models.IRepository,Models.MongoRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

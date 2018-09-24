@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Test1.Models;
 
@@ -37,4 +39,20 @@ namespace Test1
 
         }
     }
+
+    // public class LevelrequirementException : ExceptionContext
+    // {
+
+    // }
+
+    // public class ExceptionFilter : ExceptionFilterAttribute
+    // {
+    //     public override void OnException(ExceptionContext context)
+    //     {
+    //         if (context.Exception is LevelrequirementException)
+    //         {
+    //             context.Result = new BadRequestObjectResult("Level too low");
+    //         }
+    //     }
+    // }
 }

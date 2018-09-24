@@ -64,7 +64,7 @@ namespace Test1.Models
             return _repository.CreateItem(playerId, forwarded);
         }
 
-        public Task<Item> Modify(Guid playerId, ModifiedItem item)
+        public Task<Item> UpdateItem(Guid playerId, ModifiedItem item)
         {
             // var temp = Task.FromResult(GetItem(playerId, item.ItemId));
             var temp2 = GetItem(playerId, item.ItemId).Result;
@@ -72,51 +72,54 @@ namespace Test1.Models
             return _repository.UpdateItem(playerId, temp2);
         }
 
-        public Task<Item> Delete(Guid playerId, Item item)
+        public Task<Item> Delete(Guid playerId, Guid itemId)
         {
-            return _repository.DeleteItem(playerId, item);
+            var temp2 = GetItem(playerId, itemId).Result;
+
+            return _repository.DeleteItem(playerId, temp2);
         }
 
     }
 
+[ApiController]
 [Route("api/players/{playerId}/items")]
     public class ItemsController
     {
         ItemsProcessor _processor;
         
-        Guid _playerId = ;  //miten tallentaa tämä routesta?
-
         public ItemsController(ItemsProcessor processor)
         {
             _processor = processor;
         }
 
-        [HttpGet("{id}")]
-        public Task<Item> GetItem(Guid itemId)
+        [HttpGet("{itemId}")]
+        public Task<Item> GetItem(Guid playerId, Guid itemId)
         {
-            return _processor.GetItem(_playerId, itemId);
+            return _processor.GetItem(playerId, itemId);
         }
 
+        [Route("")]
         [HttpGet]
-        public Task<Item[]> GetAll()
+        public Task<Item[]> GetAll(Guid playerId)
         {
-            return _processor.GetAll(_playerId);
+            return _processor.GetAll(playerId);
         }
+        [Route("")]
         [HttpPost]
-        public Task<Item> Create([FromBody] NewItem item)
+        public Task<Item> Create(Guid playerId, NewItem item)
         {
-            return _processor.Create(_playerId, item);
+            return _processor.Create(playerId, item);
         }
         [HttpPut]
-        public Task<Item> Modify([FromBody] ModifiedItem item)
+        public Task<Item> Modify(Guid playerId, ModifiedItem item)
         {
-            return _processor.Modify(_playerId, item);
+            return _processor.UpdateItem(playerId, item);
         }
 
-        [HttpDelete("{id}")]
-        public Task<Item> Delete(Item item)
+        [HttpDelete("{itemId}")]
+        public Task<Item> Delete(Guid playerId, Guid itemId)
         {
-            return _processor.Delete(_playerId, item);
+            return _processor.Delete(playerId, itemId);
         }
 
 
