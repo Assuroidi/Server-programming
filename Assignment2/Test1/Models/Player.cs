@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,8 @@ namespace Test1.Models
         public int Score { get; set; }
         public bool IsBanned { get; set; }
         public DateTime CreationTime { get; set; }
+        public List<Item> itemList = new List<Item>();
+
     }
 
     public class NewPlayer
@@ -25,19 +28,23 @@ namespace Test1.Models
 
     public class PlayerProcessor
     {
+        // IRepository<Player, ModifiedPlayer> myRepository;
         IRepository myRepository;
+
+        // public PlayerProcessor(IRepository<Player, ModifiedPlayer> repository)
         public PlayerProcessor(IRepository repository)
+
         {
             myRepository = repository;
         }
 
         public Task<Player> Get(Guid id)
         {
-            return myRepository.Get(id);
+            return myRepository.GetPlayer(id);
         }
         public Task<Player[]> GetAll()
         {
-            return myRepository.GetAll();
+            return myRepository.GetAllPlayers();
         }
         public Task<Player> Create(NewPlayer player)
         {
@@ -47,16 +54,16 @@ namespace Test1.Models
             forwarded.IsBanned = false;
             forwarded.Score = 0;
             forwarded.Id = Guid.NewGuid();
-            return myRepository.Create(forwarded);
+            return myRepository.CreatePlayer(forwarded);
         }
         public Task<Player> Modify(Guid id, ModifiedPlayer player)
         {
-            return myRepository.Modify(id, player);
+            return myRepository.UpdatePlayer(id, player);
         }
 
         public Task<Player> Delete(Guid id)
         {
-            return myRepository.Delete(id);
+            return myRepository.DeletePlayer(id);
         }
     }
 //Postman configs

@@ -26,10 +26,12 @@ namespace Test1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            // services.AddTransient<Models.PlayerProcessor>();
+            // services.AddTransient<Models.PlayerPrdoocessor>();
             // services.AddTransient<Models.InMemoryRepository>();
             services.AddSingleton<Models.PlayerProcessor>();
-            services.AddSingleton<Models.IRepository, Models.InMemoryRepository>();
+            services.AddSingleton<Models.IRepository<Models.Player, Models.ModifiedPlayer> , Models.InMemoryRepository>();
+            services.AddSingleton<Models.ItemsProcessor>();
+            services.AddSingleton<Models.IRepository<Models.Item, Models.ModifiedItem>, Models.ItemRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
