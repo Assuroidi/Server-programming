@@ -28,7 +28,13 @@ namespace Test1.Models
         public async Task<Player> GetPlayer(Guid playerId)
         {
             var filter = Builders<Player>.Filter.Eq("id", playerId);
-            return await playerCollection.Find(filter).FirstAsync();
+            var temp = playerCollection.Find(filter) /*FirstAsync()*/;
+            var count = await temp.CountDocumentsAsync();
+            if (count > 0 )
+            {
+                return await temp.FirstAsync();
+            }
+            return null;
         }
 
         public async Task<Player[]> GetAllPlayers()
@@ -55,8 +61,10 @@ namespace Test1.Models
 
         public async Task<Item> CreateItem(Guid playerId, Item item)
         {
-            var temp = GetPlayer(playerId);
-            temp.Result.itemList.Add(item);
+            var temp = GetPlayer(playerId).Result;
+            temp.itemList.Add(item);
+            var filter = Builders<Player>.Filter.Eq("id", playerId);
+            await playerCollection.ReplaceOneAsync(filter, temp);
             return item;
         }
 
@@ -103,6 +111,8 @@ public async Task<Item> GetItem(Guid playerId, Guid itemId)
                 if (itemvar.ItemId == item.ItemId)
                 {
                     temp.Result.itemList.Remove(itemvar);
+                    var filter = Builders<Player>.Filter.Eq("id", playerId);
+                    await playerCollection.ReplaceOneAsync(filter, temp.Result);
                     return itemvar;
                 }
 
@@ -110,6 +120,26 @@ public async Task<Item> GetItem(Guid playerId, Guid itemId)
             return null;
 
         }
+
+        public Task<Player[]> GetAllPlayersMinScore(int minScore)
+        {
+            var builder = Builders<Player>.Filter;
+            var filter = builder.Gte("Score", minScore);
+            List<Player> _players = playerCollection.Find(filter).ToListAsync().Result;
+            return Task.FromResult(_players.ToArray());
+        }
+
+        public Task<Player[]> GetAllPlayersWithItem(ItemTypes itemType)
+        {
+            var builder = Builders<Player>.Filter;
+            var filter = builder.ElemMatch(e=> e.itemList, i=> i.MyType == itemType);
+            List<Player> _players = playerCollection.Find(filter).ToListAsync().Result;
+            return Task.FromResult(_players.ToArray());
+        }
+
+
+
+
 
 
 

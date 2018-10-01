@@ -6,10 +6,8 @@ using Test1.Models;
 
 namespace Test1
 {
-    public class ItemType
-    {
-        public enum Types {Sword, Axe, Shield, Armor, Potion };
-    }
+
+    public enum ItemTypes {Sword, Axe, Shield, Armor, Potion };
 
     
     public class ItemTypeAttribute : ValidationAttribute
@@ -29,7 +27,7 @@ namespace Test1
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             Item item = (Item)validationContext.ObjectInstance;
-            if (item.Type == ItemType.Types.Sword && item.Level < 3)
+            if (item.MyType == ItemTypes.Sword && item.Level < 3)
             {
                 return new ValidationResult(GetErrorMessage());
             }

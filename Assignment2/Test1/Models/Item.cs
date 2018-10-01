@@ -14,7 +14,7 @@ namespace Test1.Models
         [Range(1, 99)]
         public int Level { get; set; }
 
-        public ItemType.Types Type { get; set; }
+        public ItemTypes MyType { get; set; }
         public DateTime CreationDate { get; set; }
     }
 
@@ -24,7 +24,7 @@ namespace Test1.Models
         
         [Range(1, 99)]
         public int Level { get; set; }
-        public ItemType.Types Type { get; set; }
+        public ItemTypes MyType { get; set; }
         
     }
 
@@ -58,9 +58,9 @@ namespace Test1.Models
             Item forwarded = new Item();
             forwarded.Name = item.Name;
             forwarded.CreationDate = DateTime.Now;
-            forwarded.Level = 0;
+            forwarded.Level = item.Level;
             forwarded.ItemId = Guid.NewGuid();
-            forwarded.Type = item.Type;
+            forwarded.MyType = item.MyType;
             return _repository.CreateItem(playerId, forwarded);
         }
 
@@ -106,7 +106,7 @@ namespace Test1.Models
         }
         [Route("")]
         [HttpPost]
-        public Task<Item> Create(Guid playerId, NewItem item)
+        public Task<Item> Create(Guid playerId, [FromBody]NewItem item)
         {
             return _processor.Create(playerId, item);
         }

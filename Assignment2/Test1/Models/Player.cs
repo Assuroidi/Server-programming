@@ -65,6 +65,18 @@ namespace Test1.Models
         {
             return myRepository.DeletePlayer(id);
         }
+
+        public Task<Player[]> GetAllWithAtLeast(int minScore)
+        {
+            return myRepository.GetAllPlayersMinScore(minScore);
+
+        }
+
+        public Task<Player[]> GetAllPlayersWithItem(ItemTypes itemType)
+        {
+            return myRepository.GetAllPlayersWithItem(itemType);
+        }
+
     }
 //Postman configs
 //url -> https://localhost:5001/api/players
@@ -118,6 +130,29 @@ namespace Test1.Models
         public Task<Player> Delete(Guid id)
         {
             return myProcessor.Delete(id);
+        }
+
+        [Route("minscore")]
+        [HttpGet]
+        public Task<Player[]> GetWithQuery([FromQuery]int? minScore)
+        {
+            if (minScore.HasValue)
+            {
+                return myProcessor.GetAllWithAtLeast((int)minScore);
+            }
+            return GetAll();
+        }
+
+
+
+        [HttpGet]
+        public Task<Player[]> GetAllPlayersWithItem([FromQuery]int? itemType)
+        {
+            if (itemType.HasValue)
+            {
+                return myProcessor.GetAllPlayersWithItem((ItemTypes)itemType);
+            }
+            return GetAll();
         }
     }
 
