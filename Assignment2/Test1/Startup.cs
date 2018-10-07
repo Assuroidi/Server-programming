@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Test1
 {
@@ -33,6 +35,20 @@ namespace Test1
             services.AddSingleton<Models.ItemsProcessor>();
             // services.AddSingleton<Models.IRepository<Models.Item, Models.ModifiedItem>, Models.ItemRepository>();
             services.AddSingleton<Models.IRepository,Models.MongoRepo>();
+            services.AddSingleton<ApiAuthKey>(
+                new ApiAuthKey(Configuration.GetValue<string>("api-key"),
+                Configuration.GetValue<string>("api-key-admin")));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            services.AddMvc();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("user", policy => policy.RequireClaim("user"));
+                options.AddPolicy("admin", policy => policy.RequireClaim("admin"));
+
+            });
+            services.AddSingleton<Models.LogProcessor>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,8 +62,8 @@ namespace Test1
             {
                 app.UseHsts();
             }
-
-            // app.UseHttpsRedirection();
+            
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

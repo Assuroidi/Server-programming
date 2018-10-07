@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Test1.Models
 {
@@ -10,6 +11,8 @@ namespace Test1.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Score { get; set; }
+        public int Level { get; set; }
+
         public bool IsBanned { get; set; }
         public DateTime CreationTime { get; set; }
         public List<Item> itemList = new List<Item>();
@@ -53,12 +56,17 @@ namespace Test1.Models
             forwarded.CreationTime = DateTime.Now;
             forwarded.IsBanned = false;
             forwarded.Score = 0;
+            forwarded.Level = 1;
             forwarded.Id = Guid.NewGuid();
             return myRepository.CreatePlayer(forwarded);
         }
         public Task<Player> Modify(Guid id, ModifiedPlayer player)
         {
-            return myRepository.UpdatePlayer(id, player);
+            // return myRepository.UpdatePlayer(id, player);
+
+            Player replacePlayer = myRepository.GetPlayer(id).Result;
+            replacePlayer.Score = player.Score;
+            return myRepository.UpdatePlayer(id, replacePlayer);
         }
 
         public Task<Player> Delete(Guid id)
@@ -77,6 +85,28 @@ namespace Test1.Models
             return myRepository.GetAllPlayersWithItem(itemType);
         }
 
+        public Task<int> GetMostCommonLevel()
+        {
+            return myRepository.GetMostCommonLevel();
+
+        }
+
+        public Task<Player> PopItem(Guid playerId, Guid itemId)
+        {
+            var item = myRepository.GetItem(playerId, itemId);
+            var addScore = item.Result.Level;
+            var player = myRepository.GetPlayer(playerId);
+            player.Result.Score += addScore;
+            myRepository.UpdatePlayer(playerId, player.Result);  //update score before modfiying item list
+            myRepository.DeleteItem(playerId, item.Result);  //updates player in mongodb automatically
+            return myRepository.GetPlayer(playerId);
+
+        }
+
+        internal Task<Player[]> GetAllWithAtLeastItemAmount(int minItems)
+        {
+            return myRepository.GetAllWithAthLeastItemAmount(minItems);
+        }
     }
 //Postman configs
 //url -> https://localhost:5001/api/players
@@ -103,12 +133,6 @@ namespace Test1.Models
             return myProcessor.Get(id);
         }
 
-        [HttpGet]
-        public Task<Player[]> GetAll()  //Toimii!
-        {
-            return myProcessor.GetAll();
-        }
-
         [HttpPost]
         public Task<Player> Create([FromBody] NewPlayer player)
         {
@@ -126,34 +150,50 @@ namespace Test1.Models
             return myProcessor.Modify(id, player);
         }
 
+        
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
+        [UserActionAuditFilter]
         public Task<Player> Delete(Guid id)
         {
             return myProcessor.Delete(id);
         }
 
-        [Route("minscore")]
         [HttpGet]
-        public Task<Player[]> GetWithQuery([FromQuery]int? minScore)
+        public Task<Player[]> GetWithQuery(
+            [FromQuery]int? minScore,
+            [FromQuery]ItemTypes? itemType,
+            [FromQuery]int? minItems
+            )
         {
             if (minScore.HasValue)
             {
                 return myProcessor.GetAllWithAtLeast((int)minScore);
             }
-            return GetAll();
-        }
-
-
-
-        [HttpGet]
-        public Task<Player[]> GetAllPlayersWithItem([FromQuery]int? itemType)
-        {
-            if (itemType.HasValue)
+            else if (itemType != null)
             {
                 return myProcessor.GetAllPlayersWithItem((ItemTypes)itemType);
             }
-            return GetAll();
+            else if (minItems != null)
+            {
+                return myProcessor.GetAllWithAtLeastItemAmount((int) minItems);
+            }
+            else return myProcessor.GetAll();
         }
+
+        [HttpDelete("{playerId}/items/{itemId}")]
+        public Task<Player> PopItem(Guid playerId, Guid itemId)
+        {
+            return myProcessor.PopItem(playerId, itemId);
+        }
+
+        [Route("mostcommonlevel")]
+        [HttpGet]
+        public Task<int> GetMostCommonLevel()
+        {
+            return myProcessor.GetMostCommonLevel();
+        }
+
     }
 
 }

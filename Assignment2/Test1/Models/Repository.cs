@@ -19,7 +19,7 @@ namespace Test1.Models
     Task<Player> CreatePlayer(Player player);
     Task<Player> GetPlayer(Guid playerId);
     Task<Player[]> GetAllPlayers();
-    Task<Player> UpdatePlayer(Guid id, ModifiedPlayer player);
+    Task<Player> UpdatePlayer(Guid id, Player player);
     Task<Player> DeletePlayer(Guid playerId);
 
     Task<Item> CreateItem(Guid playerId, Item item);
@@ -29,6 +29,12 @@ namespace Test1.Models
     Task<Item> DeleteItem(Guid playerId, Item item);
     Task<Player[]> GetAllPlayersMinScore (int minScore);
     Task<Player[]> GetAllPlayersWithItem(ItemTypes itemType);
+    Task<Player[]> GetAllWithAthLeastItemAmount(int minItems);
+    Task<int> GetMostCommonLevel();
+
+    Task WriteLog(LogEntry logEntry);
+    Task<LogEntry[]> GetLogs();
+
 
 }
 
